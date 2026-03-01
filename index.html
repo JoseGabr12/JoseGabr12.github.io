@@ -118,7 +118,6 @@
 
         .results-container { width: 100%; max-width: 950px; }
         
-        /* MODO CLÁSICO XL */
         .row { display: grid; grid-template-columns: 1.2fr 0.8fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px; }
         .cell { 
             background: var(--card-bg); padding: 25px 10px; border-radius: 12px; 
@@ -127,7 +126,6 @@
         }
         .cell span { display: block; font-size: 10px; opacity: 0.7; margin-bottom: 8px; font-weight: normal; }
 
-        /* MODO LETROSO */
         .letroso-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
         .letroso-cell {
             width: 55px; height: 55px; display: flex; align-items: center; justify-content: center;
@@ -141,8 +139,6 @@
             font-weight: bold; text-align: center; font-size: 1.3rem;
             background: var(--card-bg); border: 2px solid var(--accent);
         }
-
-        #factionClue { margin-top: 10px; font-size: 1rem; color: var(--accent); font-style: italic; }
 
         .correct { background-color: var(--correct) !important; box-shadow: 0 0 10px var(--correct); }
         .present { background-color: var(--present) !important; color: black !important; box-shadow: 0 0 10px var(--present); }
@@ -171,7 +167,7 @@
 
     <div id="ultimateBox" class="ultimate-box" style="display:none;">
         ULTIMATE: <span id="skillText" style="color: var(--present);">---</span>
-        <div id="factionClue" style="display:none;">FACCIÓN: <span id="clueName">?</span></div>
+        <div id="factionClue" style="display:none; margin-top:10px; font-size:1rem; color:var(--accent); font-style:italic;">FACCIÓN: <span id="clueName">?</span></div>
     </div>
 
     <div class="input-group">
@@ -188,6 +184,7 @@
     <button id="replayBtn" class="btn-replay" onclick="resetGame()">NUEVA PARTIDA</button>
 
     <script>
+        // Lista de personajes completa
         const personajesRaw = [
             {nombre: "FLINT", faccion: "KODIAK", clase: "REFRIEGA", rango: "SUPERMAGISTRAL+", ultimate: "PRESA DE CENIZAS"},
             {nombre: "KARMA", faccion: "KODIAK", clase: "TANQUE", rango: "SUPERMAGISTRAL+", ultimate: "DESTRUCTOR DE LLAMAS"},
@@ -409,29 +406,34 @@
 
         function renderLetroso(val) {
             const row = document.createElement('div'); row.className = 'letroso-row';
-            const objNombre = objetivo.nombre;
+            const target = objetivo.nombre;
             const res = new Array(val.length).fill('incorrect');
             
-            // Diccionario para contar letras disponibles en el objetivo
+            // Conteo de letras para manejar duplicadas correctamente (amarillas)
             let counts = {};
-            for (let char of objNombre) counts[char] = (counts[char] || 0) + 1;
+            for (let char of target) {
+                counts[char] = (counts[char] || 0) + 1;
+            }
 
-            // Primera pasada: Buscar Verdes (Correctos)
+            // Primera pasada: Buscar aciertos exactos (VERDE)
             for (let i = 0; i < val.length; i++) {
-                if (val[i] === objNombre[i]) {
+                if (i < target.length && val[i] === target[i]) {
                     res[i] = 'correct';
                     counts[val[i]]--;
                 }
             }
 
-            // Segunda pasada: Buscar Amarillos (Presentes)
+            // Segunda pasada: Buscar letras presentes en otra posición (AMARILLO)
             for (let i = 0; i < val.length; i++) {
-                if (res[i] !== 'correct' && counts[val[i]] > 0) {
-                    res[i] = 'present';
-                    counts[val[i]]--;
+                if (res[i] !== 'correct') {
+                    if (counts[val[i]] > 0) {
+                        res[i] = 'present';
+                        counts[val[i]]--;
+                    }
                 }
             }
 
+            // Crear celdas visuales
             for (let i = 0; i < val.length; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'letroso-cell ' + res[i];
@@ -460,4 +462,3 @@
     </script>
 </body>
 </html>
-
