@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tapforce-dle </title>
+    <title>Tapforce-dle</title>
     <style>
         :root {
             --correct: #2ecc71;
-            --incorrect: #e74c3c;
+            --present: #f1c40f;
+            --incorrect: #34495e;
             --bg: #0b0e14;
             --card-bg: #1a1f29;
             --text: #ffffff;
             --accent: #3498db;
-            --dropdown-border: #333;
-            --dropdown-hover: #2c3e50;
         }
 
         body {
@@ -23,216 +22,172 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 30px 20px;
             margin: 0;
             min-height: 100vh;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 10px;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 15px;
             width: 100%;
-            max-width: 850px;
+            max-width: 950px;
         }
 
+        h1 { font-size: 2.8rem; margin: 0; letter-spacing: 3px; }
+
         #statsCounter {
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            color: #f1c40f;
-            text-shadow: 0 0 5px rgba(241, 196, 15, 0.3);
+            margin: 15px 0;
+            font-size: 1.4rem;
+            color: var(--present);
             font-weight: bold;
         }
 
         .mode-selector {
-            margin: 15px 0;
+            margin: 20px 0;
             display: flex;
-            gap: 10px;
+            gap: 15px;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .mode-btn {
-            padding: 10px 20px;
+            padding: 12px 25px;
             background: #222;
-            border: 1px solid var(--accent);
+            border: 2px solid var(--accent);
             color: white;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 8px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
+            font-size: 14px;
             transition: 0.3s;
+            text-transform: uppercase;
         }
 
         .mode-btn.active {
             background: var(--accent);
-            box-shadow: 0 0 10px var(--accent);
-        }
-
-        .game-container {
-            width: 100%;
-            max-width: 850px;
-            text-align: center;
-        }
-
-        .ultimate-hint-box {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 12px;
-            border: 2px solid var(--accent);
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        #skillText {
-            display: block;
-            font-size: 1.5rem;
-            color: #f1c40f;
-            text-shadow: 0 0 5px rgba(241, 196, 15, 0.5);
-            margin-top: 10px;
-        }
-
-        #factionClue {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: #3498db;
-            font-style: italic;
-            display: none;
+            box-shadow: 0 0 15px var(--accent);
         }
 
         .input-group {
             position: relative;
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 600px;
         }
 
-        .input-container { position: relative; width: 65%; }
+        .input-container { position: relative; width: 75%; }
 
         input {
             width: 100%;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 18px;
+            border-radius: 10px;
             border: 2px solid #333;
             background: #111;
             color: white;
+            font-size: 18px;
             outline: none;
             box-sizing: border-box;
-            font-size: 16px;
         }
 
         .dropdown-menu {
             position: absolute;
-            top: 100%;
+            top: 105%;
             left: 0;
             width: 100%;
             background-color: var(--card-bg);
-            border: 1px solid var(--dropdown-border);
-            max-height: 200px;
+            border: 1px solid var(--accent);
+            max-height: 250px;
             overflow-y: auto;
             z-index: 1000;
             display: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border-radius: 0 0 10px 10px;
         }
 
         .dropdown-item {
-            padding: 12px;
+            padding: 15px;
             cursor: pointer;
             text-align: left;
             border-bottom: 1px solid #333;
         }
 
-        .dropdown-item:hover { background: var(--dropdown-hover); }
+        .results-container { width: 100%; max-width: 950px; }
+        
+        /* MODO CLÁSICO XL */
+        .row { display: grid; grid-template-columns: 1.2fr 0.8fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px; }
+        .cell { 
+            background: var(--card-bg); padding: 25px 10px; border-radius: 12px; 
+            text-align: center; font-size: 15px; border: 1px solid #2c3e50;
+            font-weight: bold; display: flex; flex-direction: column; justify-content: center; min-height: 90px;
+        }
+        .cell span { display: block; font-size: 10px; opacity: 0.7; margin-bottom: 8px; font-weight: normal; }
 
-        .results-container { display: flex; flex-direction: column; gap: 10px; }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr 1fr 1fr 1.2fr;
-            gap: 8px;
+        /* MODO LETROSO */
+        .letroso-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+        .letroso-cell {
+            width: 55px; height: 55px; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 1.6rem; border-radius: 6px; text-transform: uppercase;
+            background: var(--incorrect); border: 1px solid rgba(255,255,255,0.1);
+            color: white;
         }
 
-        .ultimate-row {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            font-weight: bold;
-            text-align: center;
-            text-transform: uppercase;
+        .ultimate-box { 
+            padding: 25px; border-radius: 12px; margin-bottom: 25px; 
+            font-weight: bold; text-align: center; font-size: 1.3rem;
+            background: var(--card-bg); border: 2px solid var(--accent);
         }
 
-        .cell {
-            background-color: var(--card-bg);
-            padding: 15px 5px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #2c3e50;
-            font-size: 11px;
-            min-height: 70px;
-            text-transform: uppercase;
-        }
+        #factionClue { margin-top: 10px; font-size: 1rem; color: var(--accent); font-style: italic; }
 
-        .cell span { font-size: 8px; opacity: 0.6; margin-bottom: 5px; }
+        .correct { background-color: var(--correct) !important; box-shadow: 0 0 10px var(--correct); }
+        .present { background-color: var(--present) !important; color: black !important; box-shadow: 0 0 10px var(--present); }
+        .incorrect-btn { background-color: #e74c3c !important; }
 
-        .correct { background-color: var(--correct) !important; color: white; }
-        .incorrect { background-color: var(--incorrect) !important; color: white; }
-
-        #message { margin-bottom: 20px; font-weight: bold; height: 30px; }
         .btn-replay { 
-            padding: 15px 25px; 
-            background: #f1c40f; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            display: none; 
-            margin: 20px auto;
-            font-weight: bold;
-            font-family: 'Orbitron', sans-serif;
-            color: #000;
+            padding: 20px 40px; background: var(--present); border: none; border-radius: 10px; 
+            cursor: pointer; display: none; margin: 30px auto; font-weight: bold; font-family: 'Orbitron'; font-size: 1.2rem;
+            color: black;
         }
+
+        #attemptsLeft { margin-top: 5px; font-size: 0.9rem; color: #aaa; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>TAPFORCE-DLE</h1>
-        <div id="statsCounter">
-            LOGRADOS EN ESTA SESIÓN: <span id="winCount">0</span>
-        </div>
+        <div id="statsCounter">LOGRADOS: <span id="winCount">0</span></div>
         <div class="mode-selector">
             <button id="btnClassic" class="mode-btn active" onclick="changeMode('classic')">MODO CLÁSICO</button>
-            <button id="btnUltimates" class="mode-btn" onclick="changeMode('ultimates')">MODO ULTIMATES</button>
+            <button id="btnLetroso" class="mode-btn" onclick="changeMode('letroso')">ADIVINA EL PERSONAJE</button>
+            <button id="btnUltimates" class="mode-btn" onclick="changeMode('ultimates')">ULTIMATES</button>
         </div>
     </div>
 
-    <div class="game-container">
-        <div id="ultimateBox" class="ultimate-hint-box">
-            ADIVINA EL PERSONAJE POR SU HABILIDAD:
-            <span id="skillText">---</span>
-            <div id="factionClue">Pista: Pertenece a la facción <span id="clueName">?</span></div>
-        </div>
-
-        <div class="input-group">
-            <div class="input-container">
-                <input type="text" id="guessInput" placeholder="Nombre del luchador..." autocomplete="off">
-                <div id="dropdownMenu" class="dropdown-menu"></div>
-            </div>
-            <button class="mode-btn" style="background:var(--accent); font-weight: bold;" onclick="makeGuess()">DESPLEGAR</button>
-        </div>
-
-        <div id="message"></div>
-        <div class="results-container" id="results"></div>
-        <button id="replayBtn" class="btn-replay" onclick="resetGame()">VOLVER A JUGAR</button>
+    <div id="ultimateBox" class="ultimate-box" style="display:none;">
+        ULTIMATE: <span id="skillText" style="color: var(--present);">---</span>
+        <div id="factionClue" style="display:none;">FACCIÓN: <span id="clueName">?</span></div>
     </div>
+
+    <div class="input-group">
+        <div class="input-container">
+            <input type="text" id="guessInput" placeholder="Nombre del luchador..." autocomplete="off">
+            <div id="dropdownMenu" class="dropdown-menu"></div>
+            <div id="attemptsLeft" style="display:none;">Intentos restantes: <span id="counterNum">6</span></div>
+        </div>
+        <button class="mode-btn" style="background:var(--accent); font-weight: bold;" onclick="makeGuess()">ENVIAR</button>
+    </div>
+
+    <div id="message" style="margin-bottom:20px; font-size: 1.5rem; text-align: center; min-height: 40px;"></div>
+    <div id="results" class="results-container"></div>
+    <button id="replayBtn" class="btn-replay" onclick="resetGame()">NUEVA PARTIDA</button>
 
     <script>
-        const VAL_RANGO = { "SUPERMAGISTRAL+": 3, "ULTRA+": 2, "SUPER+": 1 };
-        const femeninos = ["KARMA", "RUBY", "LEENE", "PIXIE", "KASUMI", "LILY", "HANA", "PRIMM", "ELENA", "GIGI", "PYRA", "ROSA", "MAKI", "ROXY", "LAGUNA", "EVE", "ALICE", "SARAH", "NYX", "NOVA", "NATSU", "LILITH"];
-
         const personajesRaw = [
             {nombre: "FLINT", faccion: "KODIAK", clase: "REFRIEGA", rango: "SUPERMAGISTRAL+", ultimate: "PRESA DE CENIZAS"},
             {nombre: "KARMA", faccion: "KODIAK", clase: "TANQUE", rango: "SUPERMAGISTRAL+", ultimate: "DESTRUCTOR DE LLAMAS"},
@@ -261,7 +216,7 @@
             {nombre: "VEX", faccion: "MANTIS", clase: "MAGIA", rango: "SUPERMAGISTRAL+", ultimate: "LINEA DE SANGRE"},
             {nombre: "KOMODO", faccion: "MANTIS", clase: "REMATE", rango: "SUPERMAGISTRAL+", ultimate: "FURIA DEL BO"},
             {nombre: "SPIKE", faccion: "MANTIS", clase: "TANQUE", rango: "SUPERMAGISTRAL+", ultimate: "¡A LA CARGA!"},
-            {nombre: "TEEPO", faccion: "MANTIS", clase: "REFRIEGA", rango: "SUPERMAGISTRAL+", ultimate: "COMBO PONZOÑOZO"},
+            {nombre: "TEEPO", faccion: "MANTIS", clase: "REFRIEGA", rango: "SUPERMAGISTRAL+", ultimate: "COMBO PONZOÑOSO"},
             {nombre: "MAGUS", faccion: "MANTIS", clase: "MAGIA", rango: "SUPERMAGISTRAL+", ultimate: "ALMA OSCURA"},
             {nombre: "LEON", faccion: "MANTIS", clase: "REFRIEGA", rango: "SUPERMAGISTRAL+", ultimate: "ASUNTOS REPTILIANOS"},
             {nombre: "TORO", faccion: "MANTIS", clase: "MAGIA", rango: "SUPERMAGISTRAL+", ultimate: "RELAMPAGOS"},
@@ -299,7 +254,7 @@
             {nombre: "LOCKE", faccion: "GRULLA", clase: "REFRIEGA", rango: "SUPERMAGISTRAL+", ultimate: "GRANIZADA"},
             {nombre: "LAGUNA", faccion: "GRULLA", clase: "APOYO", rango: "SUPERMAGISTRAL+", ultimate: "¡BUEN VIAJE!"},
             {nombre: "XENO", faccion: "GRULLA", clase: "MAGIA", rango: "SUPERMAGISTRAL+", ultimate: "TORMENTA DE ENERGIA"},
-            {nombre: "REX", faccion: "GRULLA", clase: "REMATE", rango: "SUPERMAGISTRAL+", ultimate: "FAUCES LETALES"},
+            {nombre: "REX", faccion: "GRULLA", clase: "REMATE", rango: "SUPERMAGISTRAL+", ultimate: "FUACES LETALES"},
             {nombre: "GLACIO", faccion: "GRULLA", clase: "MAGIA", rango: "SUPERMAGISTRAL+", ultimate: "TORMENTA DE HIELO"},
             {nombre: "FACE", faccion: "GRULLA", clase: "APOYO", rango: "SUPERMAGISTRAL+", ultimate: "MASCARAS DE RECUCCION"},
             {nombre: "BENJI", faccion: "GRULLA", clase: "TANQUE", rango: "SUPERMAGISTRAL+", ultimate: "MARCAS SALVAJES"},
@@ -330,145 +285,178 @@
             {nombre: "LILITH", faccion: "GRIFO", clase: "MAGIA", rango: "ULTRA+", ultimate: "SEMILLA DEL DIABLO"}
         ];
 
-        const personajesData = personajesRaw.map(p => ({
-            ...p, genero: femeninos.includes(p.nombre) ? "FEMENINO" : "MASCULINO"
-        }));
-
-        const nombresOrdenados = personajesData.map(p => p.nombre).sort();
-        let objetivo = null;
-        let intentos = 0;
-        let modoActual = 'classic';
+        const femeninos = ["KARMA", "RUBY", "LEENE", "PIXIE", "KASUMI", "LILY", "HANA", "PRIMM", "ELENA", "GIGI", "PYRA", "ROSA", "MAKI", "ROXY", "LAGUNA", "EVE", "ALICE", "SARAH", "NYX", "NOVA", "NATSU", "LILITH"];
+        const personajesFull = personajesRaw.map(p => ({...p, genero: femeninos.includes(p.nombre) ? "FEMENINO" : "MASCULINO"}));
         
-        // CONTADOR DE SESIÓN
-        let victorias = sessionStorage.getItem('tapforce_wins') || 0;
+        let objetivo, modoActual = 'classic', victorias = sessionStorage.getItem('tf_wins') || 0;
+        let listaDisponibles = [], intentos = 0;
+        const MAX_INTENTOS_LETROSO = 6;
 
-        const inputGuess = document.getElementById('guessInput');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        const resultsContainer = document.getElementById('results');
+        const inputGuess = document.getElementById('guessInput'), dropdownMenu = document.getElementById('dropdownMenu'), resultsContainer = document.getElementById('results'), msgArea = document.getElementById('message');
 
-        function updateWinDisplay() {
-            document.getElementById('winCount').textContent = victorias;
-        }
-
-        function changeMode(mode) {
-            modoActual = mode;
-            document.getElementById('btnClassic').classList.toggle('active', mode === 'classic');
-            document.getElementById('btnUltimates').classList.toggle('active', mode === 'ultimates');
+        function changeMode(m) {
+            modoActual = m;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            const btnId = m === 'letroso' ? 'btnLetroso' : 'btn' + m.charAt(0).toUpperCase() + m.slice(1);
+            document.getElementById(btnId).classList.add('active');
             resetGame();
         }
 
         function resetGame() {
-            objetivo = personajesData[Math.floor(Math.random() * personajesData.length)];
+            objetivo = personajesFull[Math.floor(Math.random() * personajesFull.length)];
+            listaDisponibles = [...personajesFull];
             intentos = 0;
             resultsContainer.innerHTML = '';
-            document.getElementById('message').textContent = '';
+            msgArea.textContent = '';
             document.getElementById('replayBtn').style.display = 'none';
             document.getElementById('factionClue').style.display = 'none';
-            inputGuess.value = '';
-            inputGuess.disabled = false;
-            dropdownMenu.style.display = 'none';
-            updateWinDisplay();
+            inputGuess.disabled = false; inputGuess.value = '';
+            document.getElementById('winCount').textContent = victorias;
+            
+            const attemptsUI = document.getElementById('attemptsLeft');
+            if(modoActual === 'letroso') {
+                attemptsUI.style.display = 'block';
+                updateCounter();
+            } else {
+                attemptsUI.style.display = 'none';
+            }
 
             if(modoActual === 'ultimates') {
                 document.getElementById('ultimateBox').style.display = 'block';
                 document.getElementById('skillText').textContent = objetivo.ultimate;
                 document.getElementById('clueName').textContent = objetivo.faccion;
-                inputGuess.placeholder = "Adivina el luchador...";
             } else {
                 document.getElementById('ultimateBox').style.display = 'none';
-                inputGuess.placeholder = "Nombre del luchador...";
             }
             inputGuess.focus();
         }
 
+        function updateCounter() {
+            document.getElementById('counterNum').textContent = MAX_INTENTOS_LETROSO - intentos;
+        }
+
         function showDropdown() {
-            const val = inputGuess.value.trim().toUpperCase();
+            const val = inputGuess.value.toUpperCase();
             dropdownMenu.innerHTML = '';
             if (val.length > 0) {
-                const filtrados = nombresOrdenados.filter(n => n.startsWith(val));
+                const filtrados = listaDisponibles.filter(p => p.nombre.startsWith(val));
                 if(filtrados.length > 0) {
                     dropdownMenu.style.display = 'block';
-                    filtrados.forEach(n => {
+                    filtrados.forEach(p => {
                         const item = document.createElement('div');
                         item.className = 'dropdown-item';
-                        item.textContent = n;
-                        item.onclick = () => { inputGuess.value = n; dropdownMenu.style.display = 'none'; makeGuess(); };
+                        item.textContent = p.nombre;
+                        item.onclick = () => { inputGuess.value = p.nombre; dropdownMenu.style.display = 'none'; makeGuess(); };
                         dropdownMenu.appendChild(item);
                     });
-                } else { dropdownMenu.style.display = 'none'; }
-            } else { dropdownMenu.style.display = 'none'; }
+                } else dropdownMenu.style.display = 'none';
+            } else dropdownMenu.style.display = 'none';
         }
 
         function makeGuess() {
-            const valor = inputGuess.value.trim().toUpperCase();
-            const seleccion = personajesData.find(p => p.nombre === valor);
-            dropdownMenu.style.display = 'none';
-
-            if (!seleccion) return;
-
-            document.getElementById('message').textContent = "";
-            intentos++;
+            const val = inputGuess.value.trim().toUpperCase();
+            const idx = listaDisponibles.findIndex(p => p.nombre === val);
+            if (idx === -1) return;
             
-            if(modoActual === 'ultimates' && intentos === 5) {
+            const pj = listaDisponibles[idx];
+            dropdownMenu.style.display = 'none';
+            listaDisponibles.splice(idx, 1);
+            intentos++;
+
+            if(modoActual === 'letroso') updateCounter();
+
+            if(modoActual === 'ultimates' && intentos >= 5) {
                 document.getElementById('factionClue').style.display = 'block';
             }
 
-            if(modoActual === 'classic') renderClassicRow(seleccion);
-            else renderUltimateRow(seleccion);
+            if (modoActual === 'classic') renderClassic(pj);
+            else if (modoActual === 'letroso') renderLetroso(val);
+            else renderUltimate(pj);
 
-            if(seleccion.nombre === objetivo.nombre) {
-                document.getElementById('message').textContent = "✅ ¡ACERTADO! ES " + objetivo.nombre;
-                document.getElementById('message').style.color = "#2ecc71";
-                
-                // GUARDAR VICTORIA EN SESIÓN
-                victorias++;
-                sessionStorage.setItem('tapforce_wins', victorias);
-                updateWinDisplay();
-
-                inputGuess.disabled = true;
-                document.getElementById('replayBtn').style.display = 'block';
+            if (val === objetivo.nombre) {
+                victorias++; sessionStorage.setItem('tf_wins', victorias);
+                document.getElementById('winCount').textContent = victorias;
+                msgArea.textContent = "🏆 ¡LOGRADO! ES " + objetivo.nombre;
+                msgArea.style.color = "#2ecc71";
+                endGame();
+            } else if (modoActual === 'letroso' && intentos >= MAX_INTENTOS_LETROSO) {
+                msgArea.textContent = "❌ FALLASTE. ERA: " + objetivo.nombre;
+                msgArea.style.color = "#e74c3c";
+                endGame();
             } else {
                 inputGuess.value = '';
                 inputGuess.focus();
             }
         }
 
-        function renderClassicRow(pj) {
-            const row = document.createElement('div');
-            row.className = 'row';
-            const check = (a, b) => a === b ? 'correct' : 'incorrect';
-            let arrow = "";
-            if (pj.rango !== objetivo.rango) {
-                arrow = VAL_RANGO[objetivo.rango] > VAL_RANGO[pj.rango] ? " ↑" : " ↓";
-            }
+        function endGame() {
+            inputGuess.disabled = true;
+            document.getElementById('replayBtn').style.display = 'block';
+        }
+
+        function renderClassic(pj) {
+            const row = document.createElement('div'); row.className = 'row';
+            const check = (a, b) => a === b ? 'correct' : 'incorrect-btn';
             row.innerHTML = `
                 <div class="cell ${check(pj.nombre, objetivo.nombre)}"><span>LUCHADOR</span>${pj.nombre}</div>
                 <div class="cell ${check(pj.genero, objetivo.genero)}"><span>GÉNERO</span>${pj.genero}</div>
                 <div class="cell ${check(pj.faccion, objetivo.faccion)}"><span>FACCIÓN</span>${pj.faccion}</div>
                 <div class="cell ${check(pj.clase, objetivo.clase)}"><span>CLASE</span>${pj.clase}</div>
-                <div class="cell ${check(pj.rango, objetivo.rango)}"><span>RANGO</span>${pj.rango}${arrow}</div>
+                <div class="cell ${check(pj.rango, objetivo.rango)}"><span>RANGO</span>${pj.rango}</div>
             `;
             resultsContainer.prepend(row);
         }
 
-        function renderUltimateRow(pj) {
+        function renderLetroso(val) {
+            const row = document.createElement('div'); row.className = 'letroso-row';
+            const objNombre = objetivo.nombre;
+            const res = new Array(val.length).fill('incorrect');
+            
+            // Diccionario para contar letras disponibles en el objetivo
+            let counts = {};
+            for (let char of objNombre) counts[char] = (counts[char] || 0) + 1;
+
+            // Primera pasada: Buscar Verdes (Correctos)
+            for (let i = 0; i < val.length; i++) {
+                if (val[i] === objNombre[i]) {
+                    res[i] = 'correct';
+                    counts[val[i]]--;
+                }
+            }
+
+            // Segunda pasada: Buscar Amarillos (Presentes)
+            for (let i = 0; i < val.length; i++) {
+                if (res[i] !== 'correct' && counts[val[i]] > 0) {
+                    res[i] = 'present';
+                    counts[val[i]]--;
+                }
+            }
+
+            for (let i = 0; i < val.length; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'letroso-cell ' + res[i];
+                cell.textContent = val[i];
+                row.appendChild(cell);
+            }
+            resultsContainer.prepend(row);
+        }
+
+        function renderUltimate(pj) {
             const div = document.createElement('div');
-            const win = pj.nombre === objetivo.nombre;
-            div.className = `ultimate-row ${win ? 'correct' : 'incorrect'}`;
-            div.textContent = win ? `¡CORRECTO! ES ${pj.nombre}` : `INTENTO ${intentos}: ${pj.nombre} (FALLIDO)`;
+            div.className = `ultimate-box ${pj.nombre === objetivo.nombre ? 'correct' : 'incorrect-btn'}`;
+            div.style.border = "none";
+            div.style.color = "white";
+            div.textContent = pj.nombre + (pj.nombre === objetivo.nombre ? " (CORRECTO)" : " (FALLIDO)");
             resultsContainer.prepend(div);
         }
 
+        inputGuess.addEventListener('input', showDropdown);
+        inputGuess.addEventListener('keypress', (e) => { if(e.key === 'Enter') makeGuess(); });
         document.addEventListener('click', (e) => {
-            if (e.target !== inputGuess && e.target !== dropdownMenu) dropdownMenu.style.display = 'none';
+            if (!inputGuess.contains(e.target) && !dropdownMenu.contains(e.target)) dropdownMenu.style.display = 'none';
         });
 
-        inputGuess.addEventListener('input', showDropdown);
-        inputGuess.addEventListener('focus', showDropdown);
-        inputGuess.addEventListener('keypress', (e) => { if(e.key === 'Enter') makeGuess(); });
-        
         resetGame();
     </script>
 </body>
 </html>
-
